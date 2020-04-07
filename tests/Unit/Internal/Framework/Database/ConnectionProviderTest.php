@@ -18,8 +18,15 @@ class ConnectionProviderTest extends \PHPUnit\Framework\TestCase
     {
         $connectionProvider = new ConnectionProvider();
 
+        $connection = $connectionProvider->get();
+
         $this->assertInstanceOf(
             Connection::class,
+            $connection
+        );
+
+        $this->assertSame(
+            $connection,
             $connectionProvider->get()
         );
     }

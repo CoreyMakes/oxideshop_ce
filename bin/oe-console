@@ -41,11 +41,18 @@ if ($shopId !== 0) {
 $bootstrapFilePath = Path::join((new Facts())->getSourcePath(), 'bootstrap.php');
 require_once $bootstrapFilePath;
 
-$factory = \OxidEsales\EshopCommunity\Internal\Container\ContainerFactory::getInstance();
+$container = \OxidEsales\EshopCommunity\Internal\Container\ContainerFactory::getInstance()->getContainer();
+$commandLoader = $container->get('console.command_loader');
 
-$commandLoader = $factory->getContainer()->get('console.command_loader');
+$idCommands = [];
+foreach ($container->getParameter('console.command.ids') as $id) {
+    $idCommands[] = $container->get($id);
+}
 
 $application = new Application();
 $application->setCommandLoader($commandLoader);
+$application->addCommands(
+    $idCommands
+);
 $application->run();
 
